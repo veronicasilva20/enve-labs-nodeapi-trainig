@@ -14,12 +14,13 @@ app.get('/books', (req, res) => {
 })
 
 
-app.post('/api/books/:id',(req,res)=>{
- res.send(booksTools.getBookById())
+app.get('/api/books/:id',(req,res)=>{
+  res.send(booksTools.getBookById(req.params.id))
 }); 
 
+
 app.post('/api/ranking',(req,res)=>{
-  res.send(booksTools.getRanking())
+  res.send(booksTools.getRanking(req.params.ranking))
 });
 
 

@@ -48,8 +48,11 @@ function getBienvenida(req, res){
 //     res.send(books);
 // };
  
+
+
 function  getBookById (req, res) {
-    const book = books.find(c => c.id === parseInt(req.params.id));
+    
+    const book = books.find(c => c.id === parseInt(req));
     
     if (!book) res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Ooops... Cant find what you are looking for!</h2>');
 
@@ -59,7 +62,7 @@ function  getBookById (req, res) {
 function getRanking (req, res) {
     const librosOrdenados = books.sort((a, b) => b.ventas - a.ventas);
     const ranking = librosOrdenados.slice(0, 10);
-    res.send(ranking);
+    return(ranking);
 };
     
 function getBooks(req, res) {
@@ -73,41 +76,43 @@ function getBooks(req, res) {
     title: req.body.title
     };
     books.push(book);
-    res.send(book);
+    return(book);
 };
+
+
  
 
-// function updateBook(req, res){
-//     const book = books.find(c=> c.id === parseInt(req.params.id));
-//     if (!book) {
-//     res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Not Found!! </h2>');
-//     return;
-//     }
+function updateBook(req, res){
+    const book = books.find(c=> c.id === parseInt(req.params.id));
+    if (!book) {
+    res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Not Found!! </h2>');
+    return;
+    }
 
-//     const { error } = validateBook(req.body);
-//     if (error){
-//     res.status(400).send(error.details[0].message);
-//     return;
-//     }
+    const { error } = validateBook(req.body);
+    if (error){
+    res.status(400).send(error.details[0].message);
+    return;
+    }
     
-//     book.title = req.body.title;
-//     res.send(book);
-// };
+    book.title = req.body.title;
+    return(book);
+};
     
 
-// function deleteBook (req, res){
+function deleteBook (req, res){
  
-    // const book = books.find( c=> c.id === parseInt(req.params.id));
-    // if(!book) {
-    // res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;"> Not Found!! </h2>');
-    // return;
-    // }
+    const book = books.find( c=> c.id === parseInt(req.params.id));
+    if(!book) {
+    res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;"> Not Found!! </h2>');
+    return;
+    }
 
-    // const index = books.indexOf(book);
-    // books.splice(index,1);
+    const index = books.indexOf(book);
+    books.splice(index,1);
     
-    // res.send(book);
-    // };
+    return(book);
+    };
     
 function validateBook(book) {
         const schema = Joi.object({ title: Joi.string().min(3).required(), autor: Joi.string().min(10).required() });
@@ -120,7 +125,7 @@ module.exports={
     getBookById,
     getBooks,
     getRanking,
-    getdeleteBook
+    deleteBook
 };
 
 
