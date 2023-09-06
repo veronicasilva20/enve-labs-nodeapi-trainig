@@ -96,7 +96,7 @@ function updateBook(req, res){
     }
     
     book.title = req.body.title;
-    return(book);
+    // return(book);
 };
     
 
@@ -111,7 +111,7 @@ function deleteBook (req, res){
     const index = books.indexOf(book);
     books.splice(index,1);
     
-    return(book);
+    // return(book);
     };
     
 function validateBook(book) {

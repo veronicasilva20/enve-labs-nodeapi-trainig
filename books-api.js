@@ -25,11 +25,11 @@ app.post('/api/ranking',(req,res)=>{
 
 
 app.put('/api/books/:id',(req,res)=>{
-  res.send(booksTools.updateBook())
+  res.send(booksTools.updateBook(req.params.id))
 });
 
 app.delete('/api/books/:id', (req,res)=>{
-  res.send(booksTools.deleteBook())
+  res.send(booksTools.deleteBook(req.params.id))
 });
 
 const port = process.env.PORT || 8080;
