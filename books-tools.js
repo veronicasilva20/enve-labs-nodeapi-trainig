@@ -3,10 +3,8 @@ const Joi = require('joi');
 const app = express();
 app.use(express.json());
 
-
-
 const books = [
-
+  
   {title: 'Harry Potter', id: 1, autor: 'J.K. Rowling',ventas:500},
   {title: 'Twilight', id: 2, autor: 'Stephenie Meyer',ventas:300},
   {title: 'Lorien Legacies', id: 3, autor: 'Pittacus Lore',ventas:200},
@@ -17,91 +15,45 @@ const books = [
   {title: 'Order of the Phoenix',id:8,autor:'J.K. Rowling',ventas:430},
   {title: 'Half-Blood Prince',id:9, autor:'J.K. Rowling',ventas:600},
   {title: 'Deathly Hallows',id:10,autor:'J.K. Rowling',ventas:430},
-  {title: 'Philosophers stone',id:11,autor:'J.K. Rowling',ventas:300}
-]
+  {title: 'Philosophers stone',id:11,autor:'J.K. Rowling',ventas:900}
+];
 
-
-const joi =require('joi');
+function getWelcome(req, res) {
+  res.send('Welcome to Edurekas REST API with Node.js Tutorial!!');
+}
 
 function getAll() {
-    return(books)
-};
+  return books;
+}
 
-
-function getBooks() {
-    return(books)
-};
+function getBookById(id) {
+  return books.find((c) => c.id === parseInt(id));
+}
 
 function getRanking() {
-    return(books)
-};
+  const librosOrdenados = books.sort((a, b) => b.ventas - a.ventas);
+  return librosOrdenados.slice(0, 10);
+}
 
-function getdeleteBook() {
-    return(books)
-};
-
-function getBienvenida(req, res){
-    res.send('Welcome to Edurekas REST API with Node.js Tutorial!!');
-};
- 
-// function getBooks(eq,res) {
-//     res.send(books);
-// };
- 
-
-
-function  getBookById (req, res) {
-    
-    const book = books.find(c => c.id === parseInt(req));
-    
-    if (!book) res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Ooops... Cant find what you are looking for!</h2>');
-
-    return(book);
-};
-
-function getRanking (req, res) {
-    const librosOrdenados = books.sort((a, b) => b.ventas - a.ventas);
-    const ranking = librosOrdenados.slice(0, 10);
-    return(ranking);
-};
-    
-function getBooks(req, res) {
-    const { error } = validateBook(req.body);
-    if (error){
-    res.status(400).send(error.details[0].message)
-    return;
-    }
-    const book = {
-    id: books.length + 1,
-    title: req.body.title
-    };
-    books.push(book);
-    return(book);
-};
-
-
- 
-
-function updateBook(req, res){
-    const book = books.find(c=> c.id === parseInt(req.params.id));
+function updateBook(bookData) {
+    const book = books.find((c) => c.id === parseInt(bookData.params.id));
     if (!book) {
     res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Not Found!! </h2>');
     return;
     }
+    //console.log(req)
 
-    const { error } = validateBook(req.body);
+    const { error } = validateBook(bookData.body);
     if (error){
     res.status(400).send(error.details[0].message);
     return;
     }
-    
-    book.title = req.body.title;
-    // return(book);
+   
+   book.title = bookData.body.title   
+   return(book);
 };
-    
 
-function deleteBook (req, res){
- 
+function deleteBook(id) {
     const book = books.find( c=> c.id === parseInt(req.params.id));
     if(!book) {
     res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;"> Not Found!! </h2>');
@@ -113,21 +65,25 @@ function deleteBook (req, res){
     
     // return(book);
     };
-    
-function validateBook(book) {
-        const schema = Joi.object({ title: Joi.string().min(3).required(), autor: Joi.string().min(10).required() });
-        return schema.validate(book);
 
+
+function validateBook(book) {
+  const schema = Joi.object({
+    title: Joi.string().min(3).required(),
+    autor: Joi.string().min(10).required(),
+  });
+  return schema.validate(book);
 }
 
-module.exports={
-    getAll,
-    getBookById,
-    getBooks,
-    getRanking,
-    deleteBook
+module.exports = {
+  getWelcome,
+  getAll,
+  getBookById,
+  getRanking,
+  updateBook,
+  deleteBook,
+  validateBook,
 };
-
 
 
 

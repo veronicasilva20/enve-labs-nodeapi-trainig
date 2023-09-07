@@ -1,36 +1,47 @@
-const express = require('express')
-const app= express()
-const booksTools = require('./books-tools')
+const express = require('express');
+const app = express();
+const booksTools = require('./books-tools');
 
+app.get('/', booksTools.getWelcome);
 
-// respond with "hello world" when a GET request is made to the homepage
-app.get('/', (req, res) => {
-  res.send('hello world')
-})
-
-
-app.get('/books', (req, res) => {
-  res.send(booksTools.getAll())
-})
-
-
-app.get('/api/books/:id',(req,res)=>{
-  res.send(booksTools.getBookById(req.params.id))
-}); 
-
-
-app.post('/api/ranking',(req,res)=>{
-  res.send(booksTools.getRanking(req.params.ranking))
+app.get('/api/books', (req, res) => {
+  const books = booksTools.getAll();
+  res.send(books);
 });
 
+app.get('/api/books/:id', (req, res) => {
+  const book = booksTools.getBookById(req.params.id);
+  if (!book)
+  res
+  .status(404)
+  .send(
+    '<h2 style="font-family: Malgun Gothic; color: darkred;">Ooops... Cant find what you are looking for!</h2>'
+    );
+    res.send(book);
+  });
+  
+  app.get('/api/ranking', (req, res) => {
+    const ranking = booksTools.getRanking();
+    res.send(ranking);
+  });
 
-app.put('/api/books/:id',(req,res)=>{
-  res.send(booksTools.updateBook(req.params.id))
-});
-
-app.delete('/api/books/:id', (req,res)=>{
-  res.send(booksTools.deleteBook(req.params.id))
-});
-
-const port = process.env.PORT || 8080;
-app.listen(port, () => console.log(`Listening on port ${port}..`));  
+  app.post('/api/books/:id',(req,res)=>{
+     const book = booksTools.updateBook(req.body);
+    res.send(book);
+  });
+  
+  
+  app.put('/api/books/:id', (req, res) => {
+    const book = booksTools.updateBook(req.body);
+    res.send(book);
+  });
+  
+  app.delete('/api/books/:id', (req, res) => {
+    const book = booksTools.deleteBook(req.params.id);
+    res.send(book);
+  });
+  
+  module.exports = app;
+  
+  const port = process.env.PORT || 8080;
+  app.listen(port, () => console.log(`Listening on port ${port}..`)); 
