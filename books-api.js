@@ -10,7 +10,7 @@ app.get('/api/books', (req, res) => {
 });
 
 app.get('/api/books/:id', (req, res) => {
-  const book = booksTools.getBookById(req.params.id);
+  const book = booksTools.getBookById(req.res);
   if (!book)
   res
   .status(404)
@@ -25,23 +25,21 @@ app.get('/api/books/:id', (req, res) => {
     res.send(ranking);
   });
 
-  app.post('/api/books/:id',(req,res)=>{
-     const book = booksTools.updateBook(req.body);
-    res.send(book);
+  
+  app.post('/api/books', (req, res) => {
+    res.send(booksTools.updateBook(req),res);
   });
-  
-  
+
+
   app.put('/api/books/:id', (req, res) => {
-    const book = booksTools.updateBook(req.body);
-    res.send(book);
+  res.send(booksTools.updateBook({req}.res));
+});
+  
+  app.delete('/api/books/:id',(req,res)=>{
+    res.send(booksTools.deleteBook((req)));
   });
   
-  app.delete('/api/books/:id', (req, res) => {
-    const book = booksTools.deleteBook(req.params.id);
-    res.send(book);
-  });
-  
-  module.exports = app;
-  
+  module.express=app;
+
   const port = process.env.PORT || 8080;
   app.listen(port, () => console.log(`Listening on port ${port}..`)); 

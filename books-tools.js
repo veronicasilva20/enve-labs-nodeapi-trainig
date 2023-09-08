@@ -26,30 +26,35 @@ function getAll() {
   return books;
 }
 
-function getBookById(id) {
-  return books.find((c) => c.id === parseInt(id));
-}
+function getBookById(req,res) {
+  const book=books.find(c=>c.id===parent(req));
+  
+  if (!book)res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Ooops... Cant find what you are looking for!</h2>');
+
+  return(book);
+};
 
 function getRanking() {
   const librosOrdenados = books.sort((a, b) => b.ventas - a.ventas);
   return librosOrdenados.slice(0, 10);
 }
 
-function updateBook(bookData) {
-    const book = books.find((c) => c.id === parseInt(bookData.params.id));
+
+function updateBook({req},res) {
+    const book = books.find(c => c.id === parseInt(req.params.id));
     if (!book) {
     res.status(404).send('<h2 style="font-family: Malgun Gothic; color: darkred;">Not Found!! </h2>');
     return;
     }
     //console.log(req)
 
-    const { error } = validateBook(bookData.body);
+    const { error } = validateBook(req.body);
     if (error){
     res.status(400).send(error.details[0].message);
     return;
     }
    
-   book.title = bookData.body.title   
+   book.title = req.body.title;   
    return(book);
 };
 
@@ -63,7 +68,7 @@ function deleteBook(id) {
     const index = books.indexOf(book);
     books.splice(index,1);
     
-    // return(book);
+    return(book);
     };
 
 
