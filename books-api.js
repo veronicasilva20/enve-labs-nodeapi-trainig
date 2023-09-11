@@ -10,20 +10,12 @@ app.get('/api/books', (req, res) => {
 });
 
 app.get('/api/books/:id', (req, res) => {
-  const book = booksTools.getBookById(req.res);
-  if (!book)
-  res
-  .status(404)
-  .send(
-    '<h2 style="font-family: Malgun Gothic; color: darkred;">Ooops... Cant find what you are looking for!</h2>'
-    );
-    res.send(book);
-  });
-  
+  res.send(booksTools.getBookById ({req}));
+});
+
   app.get('/api/ranking', (req, res) => {
-    const ranking = booksTools.getRanking();
-    res.send(ranking);
-  });
+    res.send(booksTools.getRanking());
+});
 
   
   app.post('/api/books', (req, res) => {
