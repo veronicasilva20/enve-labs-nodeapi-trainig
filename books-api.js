@@ -10,7 +10,7 @@ app.get('/api/books', (req, res) => {
 });
 
 app.get('/api/books/:id', (req, res) => {
-  res.send(booksTools.getBookById ({req}));
+  res.send(booksTools.getBookById (req.params.id));
 });
 
   app.get('/api/ranking', (req, res) => {
@@ -19,15 +19,16 @@ app.get('/api/books/:id', (req, res) => {
 
   
   app.post('/api/books', (req, res) => {
-    res.send(booksTools.updateBook(req),res);
+    res.send(booksTools.postsBook(req, res));
+    
   });
 
 
   app.put('/api/books/:id', (req, res) => {
-  res.send(booksTools.updateBook({req}.res));
+  res.send(booksTools.updateBook(req.res));
 });
   
-  app.delete('/api/books/:id',(req,res)=>{
+  app.delete('/api/books/:id',(req, res)=>{
     res.send(booksTools.deleteBook((req)));
   });
   
