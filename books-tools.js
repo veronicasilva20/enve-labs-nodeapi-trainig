@@ -35,24 +35,17 @@ function getBookById(req,res) {
 };
 
 function getRanking() {
-  const librosOrdenados = books.sort((a, b) => b.ventas - a.ventas);
-  return librosOrdenados.slice(0, 10);
+  const rankigbooks = books.slice().sort((a, b) => b.ventas - a.ventas);
+  return rankigbooks;
 };
 
 
-function postBook({req}, res) {
-    const {error }= validateBook(req.body);
-    if(error){
-    res.status(400).send(error.details[0].message)
-    return;
-}
-  const book ={
-    id:books.length + 1,
-    title: req.body.title
-  };
-   books.push = (book);   
-   return(book);
+function crearBook(title) {
+   const newBook={id:books.length + 1,title,autor:'',sales:0};
+   books.push(newBook);
+   return newBook
 };
+
 
 function deleteBook(id) {
     const book = books.find( c=> c.id === parseInt(req.params.id));
@@ -94,6 +87,7 @@ module.exports = {
   getRanking,
   deleteBook,
   validateBook,
+  crearBook,
   updateBook
 };
 
